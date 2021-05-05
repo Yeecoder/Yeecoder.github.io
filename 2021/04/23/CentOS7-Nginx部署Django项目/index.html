@@ -1,0 +1,176 @@
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CentOS7+Nginx部署Django项目 | Yeecoder's Blog</title><meta name="author" content="Yeecoder"><meta name="copyright" content="Yeecoder"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="安装Django 和 uwsgi123pip install django&#x3D;&#x3D;2.2.5pip install uwsgi  测试Django在本地测试可以正常运行配置uwsgi在项目的根目录新建uwsgi.ini 文件，在文件中添加如下内容 1234567891011121314151617[uwsgi]#配置和nginx连接的socket连接socket&#x3D;127.0.0.1:8888#配置项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS7+Nginx部署Django项目">
+<meta property="og:url" content="http://example.com/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="Yeecoder&#39;s Blog">
+<meta property="og:description" content="安装Django 和 uwsgi123pip install django&#x3D;&#x3D;2.2.5pip install uwsgi  测试Django在本地测试可以正常运行配置uwsgi在项目的根目录新建uwsgi.ini 文件，在文件中添加如下内容 1234567891011121314151617[uwsgi]#配置和nginx连接的socket连接socket&#x3D;127.0.0.1:8888#配置项目">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-04-23T03:34:44.000Z">
+<meta property="article:modified_time" content="2021-04-23T03:50:15.060Z">
+<meta property="article:author" content="Yeecoder">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-04-23 11:50:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">32</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Yeecoder's Blog</a></span><span id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">CentOS7+Nginx部署Django项目</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-04-23T03:34:44.000Z" title="Created 2021-04-23 11:34:44">2021-04-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-04-23T03:50:15.060Z" title="Updated 2021-04-23 11:50:15">2021-04-23</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="安装Django-和-uwsgi"><a href="#安装Django-和-uwsgi" class="headerlink" title="安装Django 和 uwsgi"></a>安装Django 和 uwsgi</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">pip install django==2.2.5<br><br>pip install uwsgi<br></code></pre></td></tr></table></figure>
+
+<h2 id="测试Django在本地测试可以正常运行"><a href="#测试Django在本地测试可以正常运行" class="headerlink" title="测试Django在本地测试可以正常运行"></a>测试Django在本地测试可以正常运行</h2><h2 id="配置uwsgi"><a href="#配置uwsgi" class="headerlink" title="配置uwsgi"></a>配置uwsgi</h2><p>在项目的根目录新建uwsgi.ini 文件，在文件中添加如下内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell">[uwsgi]<br><span class="hljs-meta">#</span><span class="bash">配置和nginx连接的socket连接</span><br>socket=127.0.0.1:8888<br><span class="hljs-meta">#</span><span class="bash">配置项目路径，项目的所在目录(包括项目本身)</span><br>chdir=/Project/mysite/<br><span class="hljs-meta">#</span><span class="bash">配置wsgi接口模块文件路径,也就是wsgi.py这个文件所在的目录名</span><br>wsgi-file=mysite/wsgi.py<br><span class="hljs-meta">#</span><span class="bash">配置启动的进程数</span><br>processes=4<br><span class="hljs-meta">#</span><span class="bash">配置每个进程的线程数</span><br>threads=2<br><span class="hljs-meta">#</span><span class="bash">配置启动管理主进程</span><br>master=True<br><span class="hljs-meta">#</span><span class="bash">配置存放主进程的进程号文件</span><br>pidfile=uwsgi.pid<br><span class="hljs-meta">#</span><span class="bash">配置dump日志记录</span><br>daemonize=uwsgi.log<br></code></pre></td></tr></table></figure>
+
+<p>完成后在项目根目录下运行如下命令启动uwsgi</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">uwsgi --ini uwsgi.ini<br></code></pre></td></tr></table></figure>
+
+<p>显示 [uWSGI] getting INI configuration from uwsgi.ini 表明uwsgi运行成功</p>
+<h2 id="安装Nginx和相关配置"><a href="#安装Nginx和相关配置" class="headerlink" title="安装Nginx和相关配置"></a>安装Nginx和相关配置</h2><p>下载安装包，建议下载稳定版</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget http://nginx.org/download/nginx-1.20.0.tar.gz<br></code></pre></td></tr></table></figure>
+
+<p>完成后解压到指定目录下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -zxvf nginx-1.13.7.tar.gz -C &lt;指定目录&gt;<br></code></pre></td></tr></table></figure>
+
+<p>进入解压后的Nginx目录，执行如下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">./configure<br>make<br>make install<br></code></pre></td></tr></table></figure>
+
+<p>nginx一般默认安装到/usr/local/nginx路径下</p>
+<p>进入/usr/local/nginx/conf目录下，修改nginx.conf文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs shell">events &#123;<br>    worker_connections  1024;<br>&#125;<br>http &#123;<br>    include       mime.types;<br>    default_type  application/octet-stream;<br>    sendfile        on;<br>    server &#123;<br>        listen 80;<br>        server_name  www.django.cn; #改为自己的域名，没域名修改为127.0.0.1:80<br>        charset utf-8;<br>        location / &#123;<br>           include uwsgi_params;<br>           uwsgi_pass 127.0.0.1:8888;  #端口要和uwsgi里配置的一样<br>           uwsgi_param UWSGI_SCRIPT mysite.wsgi;  #wsgi.py所在的目录名+.wsgi<br>           uwsgi_param UWSGI_CHDIR /data/wwwroot/mysite/; #项目路径<br>           <br>        &#125;<br>        location /static/ &#123;<br>        alias /data/wwwroot/mysite/static/; #静态资源路径<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>完成后进入/usr/local/nginx/sbin目录下执行如下命令测试nginx是否正常启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./nginx<br></code></pre></td></tr></table></figure>
+
+<p>如果使用浏览器输入服务器地址和端口可以看到欢迎页面则说明成功。</p>
+<h2 id="相关设置"><a href="#相关设置" class="headerlink" title="相关设置"></a>相关设置</h2><p>在Django项目里修改setting.py文件中如下内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">DEBUG = False <br>ALLOWED_HOSTS = [&#x27;*&#x27;]<br></code></pre></td></tr></table></figure>
+
+<p>完成后重启nginx，即可访问自己的项目。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Yeecoder</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/">http://example.com/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/24/MongoDB/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">MongoDB</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E5%9B%9B%EF%BC%89flume%E5%92%8Ckafka%E5%92%8Csqoop%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">大数据之路（四）flume和kafka和sqoop的安装和配置</div></div></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/null" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Yeecoder</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">32</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Yeecoder"><i class="fab fa-github"></i><span>Follow Me</span></a></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Django-%E5%92%8C-uwsgi"><span class="toc-number">1.</span> <span class="toc-text">安装Django 和 uwsgi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95Django%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%B5%8B%E8%AF%95%E5%8F%AF%E4%BB%A5%E6%AD%A3%E5%B8%B8%E8%BF%90%E8%A1%8C"><span class="toc-number">2.</span> <span class="toc-text">测试Django在本地测试可以正常运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEuwsgi"><span class="toc-number">3.</span> <span class="toc-text">配置uwsgi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Nginx%E5%92%8C%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">安装Nginx和相关配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">相关设置</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/04/24/MongoDB/" title="MongoDB"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MongoDB"/></a><div class="content"><a class="title" href="/2021/04/24/MongoDB/" title="MongoDB">MongoDB</a><time datetime="2021-04-24T02:27:52.000Z" title="Created 2021-04-24 10:27:52">2021-04-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/" title="CentOS7+Nginx部署Django项目"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CentOS7+Nginx部署Django项目"/></a><div class="content"><a class="title" href="/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/" title="CentOS7+Nginx部署Django项目">CentOS7+Nginx部署Django项目</a><time datetime="2021-04-23T03:34:44.000Z" title="Created 2021-04-23 11:34:44">2021-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E5%9B%9B%EF%BC%89flume%E5%92%8Ckafka%E5%92%8Csqoop%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（四）flume和kafka和sqoop的安装和配置"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大数据之路（四）flume和kafka和sqoop的安装和配置"/></a><div class="content"><a class="title" href="/2021/04/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E5%9B%9B%EF%BC%89flume%E5%92%8Ckafka%E5%92%8Csqoop%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（四）flume和kafka和sqoop的安装和配置">大数据之路（四）flume和kafka和sqoop的安装和配置</a><time datetime="2021-04-02T21:34:26.000Z" title="Created 2021-04-03 05:34:26">2021-04-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%89%EF%BC%89Hive%E5%92%8CMySql8-0%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（三）Hive和MySql8.0的安装和配置"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大数据之路（三）Hive和MySql8.0的安装和配置"/></a><div class="content"><a class="title" href="/2021/04/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%89%EF%BC%89Hive%E5%92%8CMySql8-0%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（三）Hive和MySql8.0的安装和配置">大数据之路（三）Hive和MySql8.0的安装和配置</a><time datetime="2021-04-01T00:55:42.000Z" title="Created 2021-04-01 08:55:42">2021-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%BA%8C%EF%BC%89Zookeeper%E5%92%8CHbase%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（二）Zookeeper和Hbase的安装和配置"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大数据之路（二）Zookeeper和Hbase的安装和配置"/></a><div class="content"><a class="title" href="/2021/03/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%BA%8C%EF%BC%89Zookeeper%E5%92%8CHbase%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（二）Zookeeper和Hbase的安装和配置">大数据之路（二）Zookeeper和Hbase的安装和配置</a><time datetime="2021-03-31T13:24:49.000Z" title="Created 2021-03-31 21:24:49">2021-03-31</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Yeecoder</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>

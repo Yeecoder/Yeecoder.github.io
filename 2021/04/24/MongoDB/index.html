@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MongoDB | Yeecoder's Blog</title><meta name="author" content="Yeecoder"><meta name="copyright" content="Yeecoder"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="What is NoSQLNoSQL 即，Not only SQL，即不仅仅是SQL现代计算机系统和网络中每天都会产生庞大的各种各样类型的数据，这些数据中有一部分结构化数据能够使用传统的关系型数据库管理系统即RDBMS来管理，但仍然有一部分非结构化或半结构化数据不能被关系型数据库进行管理，从而产生了非关系型数据库。 关系型数据库遵循ACID原则 原子性：事务中的操作要么都做完，要么都不做 一致性：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB">
+<meta property="og:url" content="http://example.com/2021/04/24/MongoDB/index.html">
+<meta property="og:site_name" content="Yeecoder&#39;s Blog">
+<meta property="og:description" content="What is NoSQLNoSQL 即，Not only SQL，即不仅仅是SQL现代计算机系统和网络中每天都会产生庞大的各种各样类型的数据，这些数据中有一部分结构化数据能够使用传统的关系型数据库管理系统即RDBMS来管理，但仍然有一部分非结构化或半结构化数据不能被关系型数据库进行管理，从而产生了非关系型数据库。 关系型数据库遵循ACID原则 原子性：事务中的操作要么都做完，要么都不做 一致性：">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-04-24T02:27:52.000Z">
+<meta property="article:modified_time" content="2021-04-30T06:21:15.316Z">
+<meta property="article:author" content="Yeecoder">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/04/24/MongoDB/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-04-30 14:21:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">32</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Yeecoder's Blog</a></span><span id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><h1 class="post-title">MongoDB</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-04-24T02:27:52.000Z" title="Created 2021-04-24 10:27:52">2021-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-04-30T06:21:15.316Z" title="Updated 2021-04-30 14:21:15">2021-04-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="What-is-NoSQL"><a href="#What-is-NoSQL" class="headerlink" title="What is NoSQL"></a>What is NoSQL</h2><h3 id="NoSQL-即，Not-only-SQL，即不仅仅是SQL"><a href="#NoSQL-即，Not-only-SQL，即不仅仅是SQL" class="headerlink" title="NoSQL 即，Not only SQL，即不仅仅是SQL"></a>NoSQL 即，Not only SQL，即不仅仅是SQL</h3><p>现代计算机系统和网络中每天都会产生庞大的各种各样类型的数据，这些数据中有一部分结构化数据能够使用传统的关系型数据库管理系统即RDBMS来管理，但仍然有一部分非结构化或半结构化数据不能被关系型数据库进行管理，从而产生了非关系型数据库。</p>
+<p>关系型数据库遵循ACID原则</p>
+<p>原子性：事务中的操作要么都做完，要么都不做</p>
+<p>一致性：数据库要一直处于一致的状态</p>
+<p>独立性：并发的事务之间不会相互影响</p>
+<p>持久性：一旦事务提交，所做修改会永久保留在数据库上</p>
+<h3 id="非关系型数据库遵循BASE原则"><a href="#非关系型数据库遵循BASE原则" class="headerlink" title="非关系型数据库遵循BASE原则"></a>非关系型数据库遵循BASE原则</h3><p>基本可用</p>
+<p>软状态/柔性事务</p>
+<p>最终一致性</p>
+<h3 id="常见的NoSQL"><a href="#常见的NoSQL" class="headerlink" title="常见的NoSQL"></a>常见的NoSQL</h3><p>列存储：HBase、Cassandra、Hypertable</p>
+<p>文档存储：MongoDB、CouchDB</p>
+<p>key-value 存储：Tokyo Cabinet、MemcaccheDB、Redis</p>
+<p>图存储：Neo4j、FlockDB</p>
+<p>对象存储：db4o、Versant</p>
+<p>xml数据库：Berkeley DB、XML BaseX</p>
+<h2 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a>MongoDB</h2><p>由C++编写，基于分布式文件存储的开源数据库系统</p>
+<p>具有很强的可拓展性，高负载时可以添加更多节点保证服务器性能</p>
+<p>旨在为web应用提供可扩展的高性能数据存储解决方案</p>
+<p>MongoDB将数据存储为一个文档，数据结构由键值对组成，类似与JSON对象，字段值可以包含其他文档、数组和文档数组</p>
+<p>可以设置任何属性的索引，可以通过本地或网络创建数据镜像，使其具有很强的扩展性，查询能力强</p>
+<p>其中MongoDB不支持表连接（但可以嵌入文档）</p>
+<p>database：数据库，与RDBMS中数据库的概念类似</p>
+<p>collection：数据集合，与RDBMS中表的概念类似</p>
+<p>document：数据文档，与RDBMS中行的概念类似</p>
+<p>field：数据域，与RDBMS中字段的概念类似</p>
+<p>index：索引</p>
+<p>primary key：逐渐，MongoDB自动将id字段设置为主键</p>
+<p>MongoDB中文档之间的关系可以是一对一、一对多、多对一、多对多，可以通过嵌入（包括完整的信息）和引用（通过id字段）建立联系</p>
+<p>引用包括两种方式，一种是DBRefs，一种是手动引用，</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>MongoDB默认数据库为db，存在于安装目录下的data目录中</p>
+<p>保留数据库：<br>admin（类似Linux中的root用户组），一些特定的服务端命令只能从这个库中运行；local数据库中的数据永远不会被复制，可以用来存储限于本地单台服务器的任意集合；config数据库，当mongo用于分片设置时，config在内部使用，用于保存分片的相关信息，类似Hadoop中存储元数据的master节点</p>
+<p>MongoDB的文档不需要设置相同的字段，相同字段不需要相同的数据类型。</p>
+<p>MongoDB中键值对是有序的，键值对中的值不仅可以是字符串，还可以是其他数据类型如文档等；区分大小写和类型；不能有重复的键；键是字符串</p>
+<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><p>字符串、整型、布尔值、双精度浮点型、最大值/最小值、数组、时间戳、内嵌文档、空值、符号、日期、对象ID、二进制数据、代码、正则表达式</p>
+<p>连接数据库：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mongodb://username:password@hostname/dbname/?options<br></code></pre></td></tr></table></figure>
+
+<p>创建数据库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 如果数据库不存在，则创建数据库，否则切换到指定数据库</span><br>use DATABASE_NAME<br></code></pre></td></tr></table></figure>
+
+<p>当数据库为空时，使用如下命令，则不会显示出来，如果不建立新的数据库直接插入内容，则会默认插入到test数据库中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">show dbs<br></code></pre></td></tr></table></figure>
+
+<p>插入数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.collection_name.insert(&#123;&quot;name&quot;:&quot;学习MongoDB&quot;&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>删除数据库，默认为test</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">use DATABASE_NAME<br><br>db.dropDatabase()<br></code></pre></td></tr></table></figure>
+
+<p>创建集合</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 其中options参数用于设定集合大小、最大值等</span><br>db.createCollection(name,options)<br></code></pre></td></tr></table></figure>
+
+<p>删除集合</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.collection_name.drop()<br></code></pre></td></tr></table></figure>
+
+<p>插入文档</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.insert(document)<br><span class="hljs-meta">#</span><span class="bash"> 或</span><br>db.COLLECTION_NAME.save(document)<br></code></pre></td></tr></table></figure>
+
+<p>插入单个文档</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.insertOne(<br>    &lt;document&gt;,<br>    &#123;<br>        writeConcern:&lt;document&gt;<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<p>插入若干文档</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.insertMany(<br>    &lt;document&gt;,<br>    &#123;<br>        writeConcern:&lt;document&gt;,<br>        ordered:&lt;boolean&gt;<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<p>也可以将内瓤创建为一个变量，然后插入变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">doc = (&#123;<br>    title: &#x27;MongoDB学习&#x27;, <br>    description: &#x27;MongoDB学习&#x27;,<br>    by: &#x27;zbw&#x27;<br>&#125;);<br>db.COLLECTION_NAME.insert(doc)<br></code></pre></td></tr></table></figure>
+
+<p>更新文档</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> update方法用于更新已经存在的文档</span><br>db.COLLECTION_NAME.update(<br>    &lt;query&gt;, # 查询条件，类似SQL查询中where后的部分<br>    &lt;update&gt;, # 更新的对象和更新的操作符，如$set<br>    &#123;<br>        upsert:&lt;boolean&gt;, # 如果不存在update的记录，是否插入，true为插入<br>        multi:&lt;boolean&gt;, # 若为true，则按条件查找多条记录全部更新，若为false则值更新找到的第一条记录<br>        writeConcern:&lt;document&gt; # 抛出异常的级别<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.save(<br>    &lt;document&gt;,<br>    &#123;<br>        writeConcern:&lt;document&gt;<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<p>删除文档</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 移除集合中的数据，在移除前，通常先首先执行find命令判断执行的条件是否正确</span><br>db.COLLECTION_NAME.remove(<br>    &lt;query&gt;, # 删除文档的条件<br>    &lt;justOne&gt; # 若为true，则只删除一个文档，否则删除所有匹配条件的文档<br>)<br><br><span class="hljs-meta">#</span><span class="bash"> 移除所有数据</span><br>db.COLLECTION_NAME.remove(&#123;&#125;)<br><br><span class="hljs-meta">#</span><span class="bash"> 移除第一条找到的记录</span><br>db.COLLECTION_NAME.remove(&#123;...&#125;,1)<br></code></pre></td></tr></table></figure>
+
+<p>最新的方法为</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 删除全部文档</span><br>db.COLLECTION_NAME.deleteMany(&#123;&#125;)<br><br><span class="hljs-meta">#</span><span class="bash"> 删除单个文档</span><br>db.COLLECTION_NAME.deletaOne(&#123;&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>查询文档</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.find(query,projection)<br><span class="hljs-meta">#</span><span class="bash"> query使用查询操作符指定查询条件</span><br><span class="hljs-meta">#</span><span class="bash"> projection使用投影操作符指定返回的键，要么全0，要么全1</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 以格式化的方式返回所有文档</span><br>db.col.find().pretty()<br></code></pre></td></tr></table></figure>
+
+<p>查询条件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 等于 &#123;&lt;key&gt;:&lt;value&gt;&#125;</span><br><span class="hljs-meta">#</span><span class="bash"> 小于 &#123;&lt;key&gt;:&#123;<span class="hljs-variable">$lt</span>:&lt;value&gt;&#125;&#125;</span><br><span class="hljs-meta">#</span><span class="bash"> 小于等于 &#123;&lt;key&gt;:&#123;<span class="hljs-variable">$lte</span>:&lt;value&gt;&#125;&#125;</span><br><span class="hljs-meta">#</span><span class="bash"> 大于 &#123;&lt;key&gt;:&#123;<span class="hljs-variable">$gt</span>:&lt;value&gt;&#125;&#125;</span><br><span class="hljs-meta">#</span><span class="bash"> 大于等于 &#123;&lt;key&gt;:&#123;<span class="hljs-variable">$gte</span>:&lt;value&gt;&#125;&#125;</span><br><span class="hljs-meta">#</span><span class="bash"> 不等于 &#123;&lt;key&gt;:&#123;<span class="hljs-variable">$ne</span>:&lt;value&gt;&#125;&#125;</span><br><br><span class="hljs-meta">#</span><span class="bash"> AND</span><br>db.COLLECTION_NAME.find(&#123;key1:value1,key2:value2&#125;)<br><span class="hljs-meta">#</span><span class="bash"> OR</span><br>db.COLLECTION_NAME.find(<br>    &#123;<br>        $or: [<br>            &#123;key1:value1&#125;,&#123;key2:value2&#125;<br>        ]<br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 按照指定类型查找数据</span><br>db.COLLECTION_NAME.find(&#123;&quot;字段&quot;:&#123;$type : 数据类型代码&#125;&#125;)<br><br>db.COLLECTION_NAME.find(&#123;&quot;字段&quot;:&#123;$type : &#x27;数据类型&#x27;&#125;&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>读取指定数量的数据记录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.find().limit(NUMBER)<br></code></pre></td></tr></table></figure>
+
+<p>跳过指定数量的数据记录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.find().skip(NUMBER)<br></code></pre></td></tr></table></figure>
+
+<p>但需要注意的是使用skip做查询当数据量很大时会造成性能急剧下降，因为skip是完整遍历整个数据库</p>
+<p>排序</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">1表示升序，-1表示降序<br>db.COLLECTION_NAME.find().sort(&#123;key:1/-1&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>当skip、limit、sort三个放在一起执行时，执行的顺序为sort、skip、limit</p>
+<p>与RDBMS一样，MongoDB具有索引，索引能够极大的提高查询的效率。索引是一种特殊的数据结构，并存储在一个易于遍历读取的数据集合中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> 创建索引</span><br>db.COLLECTION_NAME.createIndex(keys,options)<br></code></pre></td></tr></table></figure>
+
+<p>聚合函数</p>
+<p>类似于SQL中的count(*)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs shell">db.COLLECTION_NAME.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, num_tutorial : &#123;$sum : &quot;$likes&quot;&#125;&#125;&#125;])<br><br>db.mycol.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, num_tutorial : &#123;$avg : &quot;$likes&quot;&#125;&#125;&#125;])<br><br>db.mycol.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, num_tutorial : &#123;$min : &quot;$likes&quot;&#125;&#125;&#125;])<br><br>db.mycol.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, num_tutorial : &#123;$max : &quot;$likes&quot;&#125;&#125;&#125;])<br><br>db.mycol.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, url : &#123;$push : &quot;$url&quot;&#125;&#125;&#125;])<br><br>db.mycol.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, url : &#123;$addToSet : &quot;$url&quot;&#125;&#125;&#125;])<br><br>db.mycol.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, first_url : &#123;$first : &quot;$url&quot;&#125;&#125;&#125;])<br><br>db.mycol.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, last_url : &#123;$last : &quot;$url&quot;&#125;&#125;&#125;])<br></code></pre></td></tr></table></figure>
+
+<p>MongoDB 中管道的概念，类似于Linux中管道的概念， 即上一个管道处理完毕后的结果传递给下一个管道处理，管道操作可以重复。</p>
+<p>复制</p>
+<p>MongoDB复制即将多个服务器中的数据进行同步。通过制造备份的方式，提高数据的可用性和安全性，同时对故障恢复提供支持。通常是将主节点中的内容复制到从节点。主节点上记录对数据的所有操作，从节点定期从主节点获取这些操作，并在从服务器上执行，保证节点之间数据的一致性。</p>
+<p>分片</p>
+<p>分片技术可以满足MongoDB数据量大量增长的需求。即在多台设备上分割数据，使得能够存储和处理更多的数据。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Yeecoder</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2021/04/24/MongoDB/">http://example.com/2021/04/24/MongoDB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">CentOS7+Nginx部署Django项目</div></div></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/null" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Yeecoder</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">32</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Yeecoder"><i class="fab fa-github"></i><span>Follow Me</span></a></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-NoSQL"><span class="toc-number">1.</span> <span class="toc-text">What is NoSQL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NoSQL-%E5%8D%B3%EF%BC%8CNot-only-SQL%EF%BC%8C%E5%8D%B3%E4%B8%8D%E4%BB%85%E4%BB%85%E6%98%AFSQL"><span class="toc-number">1.1.</span> <span class="toc-text">NoSQL 即，Not only SQL，即不仅仅是SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E9%81%B5%E5%BE%AABASE%E5%8E%9F%E5%88%99"><span class="toc-number">1.2.</span> <span class="toc-text">非关系型数据库遵循BASE原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84NoSQL"><span class="toc-number">1.3.</span> <span class="toc-text">常见的NoSQL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MongoDB"><span class="toc-number">2.</span> <span class="toc-text">MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.2.1.</span> <span class="toc-text">数据类型</span></a></li></ol></li></ol></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/04/24/MongoDB/" title="MongoDB"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MongoDB"/></a><div class="content"><a class="title" href="/2021/04/24/MongoDB/" title="MongoDB">MongoDB</a><time datetime="2021-04-24T02:27:52.000Z" title="Created 2021-04-24 10:27:52">2021-04-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/" title="CentOS7+Nginx部署Django项目"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CentOS7+Nginx部署Django项目"/></a><div class="content"><a class="title" href="/2021/04/23/CentOS7-Nginx%E9%83%A8%E7%BD%B2Django%E9%A1%B9%E7%9B%AE/" title="CentOS7+Nginx部署Django项目">CentOS7+Nginx部署Django项目</a><time datetime="2021-04-23T03:34:44.000Z" title="Created 2021-04-23 11:34:44">2021-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E5%9B%9B%EF%BC%89flume%E5%92%8Ckafka%E5%92%8Csqoop%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（四）flume和kafka和sqoop的安装和配置"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大数据之路（四）flume和kafka和sqoop的安装和配置"/></a><div class="content"><a class="title" href="/2021/04/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E5%9B%9B%EF%BC%89flume%E5%92%8Ckafka%E5%92%8Csqoop%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（四）flume和kafka和sqoop的安装和配置">大数据之路（四）flume和kafka和sqoop的安装和配置</a><time datetime="2021-04-02T21:34:26.000Z" title="Created 2021-04-03 05:34:26">2021-04-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%89%EF%BC%89Hive%E5%92%8CMySql8-0%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（三）Hive和MySql8.0的安装和配置"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大数据之路（三）Hive和MySql8.0的安装和配置"/></a><div class="content"><a class="title" href="/2021/04/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%89%EF%BC%89Hive%E5%92%8CMySql8-0%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（三）Hive和MySql8.0的安装和配置">大数据之路（三）Hive和MySql8.0的安装和配置</a><time datetime="2021-04-01T00:55:42.000Z" title="Created 2021-04-01 08:55:42">2021-04-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%BA%8C%EF%BC%89Zookeeper%E5%92%8CHbase%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（二）Zookeeper和Hbase的安装和配置"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大数据之路（二）Zookeeper和Hbase的安装和配置"/></a><div class="content"><a class="title" href="/2021/03/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%BA%8C%EF%BC%89Zookeeper%E5%92%8CHbase%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE/" title="大数据之路（二）Zookeeper和Hbase的安装和配置">大数据之路（二）Zookeeper和Hbase的安装和配置</a><time datetime="2021-03-31T13:24:49.000Z" title="Created 2021-03-31 21:24:49">2021-03-31</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Yeecoder</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></div></body></html>
